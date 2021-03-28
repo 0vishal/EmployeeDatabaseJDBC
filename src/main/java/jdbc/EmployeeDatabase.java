@@ -78,15 +78,20 @@ public class EmployeeDatabase {
         return payrollServiceData;
     }
 
-    public void updateRecord(){
-        String SqlQuery="\"update employee_payroll set Salary=40000 where id=1";
-        try {
-            Connection connection=this.getConnection();
-            Statement statement=connection.createStatement();
-            long ResultSet= statement.executeUpdate(SqlQuery);
-        }catch (SQLException | IllegalAccessException e){
-            e.printStackTrace();
-        }
-    }
-}
 
+
+
+    public long updateRecord(double salary,int id){
+            try {
+                    Connection connection=this.getConnection();
+                    PreparedStatement preparedStatement=connection.prepareStatement("Update employee_payroll set salary=? where id=? ; ");
+                    preparedStatement.setDouble(1,salary);
+                    preparedStatement.setInt(2,id);
+                    long resultSet=preparedStatement.executeUpdate();
+                    System.out.println(resultSet);
+                    return resultSet;
+                } catch (SQLException | IllegalAccessException e){
+                    e.printStackTrace();
+                }
+                return 0;
+            }

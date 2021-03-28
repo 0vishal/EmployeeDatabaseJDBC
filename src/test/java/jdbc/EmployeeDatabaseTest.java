@@ -16,11 +16,12 @@ public class EmployeeDatabaseTest {
     }
 
     @Test
-    void updateRecord(){
-       employeeDatabase=new EmployeeDatabase();
-        employeeDatabase.updateRecord();
-        List<PayrollService>payrollServiceDataList=employeeDatabase.readData();
-        Assertions.assertEquals(2,payrollServiceDataList.size());
+    void update_Record(){
+        double salary=600000;
+        int id=1;
+        employeeDatabase=new EmployeeDatabase();
+        long result=employeeDatabase.updateRecord(salary,id);
+        Assertions.assertEquals(2,result);
     }
 }
 
