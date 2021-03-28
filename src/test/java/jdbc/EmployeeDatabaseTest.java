@@ -14,5 +14,13 @@ public class EmployeeDatabaseTest {
         List<PayrollService> payrollServiceDataList=employeeDatabase.readData();
         Assertions.assertEquals(2,payrollServiceDataList.size());
     }
+
+    @Test
+    void updateRecord(){
+       employeeDatabase=new EmployeeDatabase();
+        employeeDatabase.updateRecord();
+        List<PayrollService>payrollServiceDataList=employeeDatabase.readData();
+        Assertions.assertEquals(2,payrollServiceDataList.size());
+    }
 }
 

@@ -42,8 +42,8 @@ public class EmployeeDatabase {
         }
 
         public List<PayrollService> readData() {
-        String Sql_Query = "select * from Payroll_ServiceTable";
-        List<PayrollService> payrollServiceData = new ArrayList<>();
+        String Sql_Query = "select * from employee_payroll"
+        List<PayrollService> payrollServiceData = new ArrayList<PayrollService>();
         try {
             Connection connection = this.getConnection();
             Statement statement = connection.createStatement();
@@ -78,5 +78,15 @@ public class EmployeeDatabase {
         return payrollServiceData;
     }
 
+    public void updateRecord(){
+        String SqlQuery="\"update employee_payroll set Salary=40000 where id=1";
+        try {
+            Connection connection=this.getConnection();
+            Statement statement=connection.createStatement();
+            long ResultSet= statement.executeUpdate(SqlQuery);
+        }catch (SQLException | IllegalAccessException e){
+            e.printStackTrace();
+        }
+    }
 }
 
