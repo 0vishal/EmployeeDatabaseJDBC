@@ -1,12 +1,18 @@
 package jdbc;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class EmployeeDatabaseTest {
     EmployeeDatabase employeeDatabase;
 
     @Test
-    public void checkconnection() throws IllegalAccessException {
-        employeeDatabase = new EmployeeDatabase();
-        employeeDatabase.getConnection();
-    }}
+    void readData() {
+        employeeDatabase=new EmployeeDatabase();
+        List<PayrollService> payrollServiceDataList=employeeDatabase.readData();
+        Assertions.assertEquals(2,payrollServiceDataList.size());
+    }
+}
+
