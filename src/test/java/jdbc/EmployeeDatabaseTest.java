@@ -32,5 +32,12 @@ public class EmployeeDatabaseTest {
         Assertions.assertEquals(2, employeePayrollDataList.size());
     }
 
+    @Test
+    public void functions(){
+        employeeDatabase=new EmployeeDatabase();
+        List<String> list=employeeDatabase.datafunction();
+        Assertions.assertEquals(4,list.size());
+    }
+
 }
 

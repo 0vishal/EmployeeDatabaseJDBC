@@ -135,4 +135,27 @@ public class EmployeeDatabase {
         return payrollServiceData;
     }
 
- }
+    public List<String> datafunction() {
+        List<String> list=new ArrayList<>();
+        try {
+            Connection connection=this.getConnection();
+            PreparedStatement preparedStatement=connection.prepareStatement("select gender,sum(salary), avg(salary),min(salary),max(salary),count(salary) from employee_payroll group by gender");
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int index=1;
+                System.out.println("Gender: "+resultSet.getString(1));
+                System.out.println("Salary: "+resultSet.getString(2));
+                for (int i=0;i<10;i++){
+                    if(index<5) {
+                        list.add(i, resultSet.getString(index));
+                        index++;
+                    }
+                }
+                System.out.println(list);
+            }
+        }catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+}
