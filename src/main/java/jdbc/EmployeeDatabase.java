@@ -42,7 +42,7 @@ public class EmployeeDatabase {
         }
 
         public List<PayrollService> readData() {
-        String Sql_Query = "select * from employee_payroll"
+        String Sql_Query = "select * from employee_payroll";
         List<PayrollService> payrollServiceData = new ArrayList<PayrollService>();
         try {
             Connection connection = this.getConnection();
@@ -95,3 +95,44 @@ public class EmployeeDatabase {
                 }
                 return 0;
             }
+
+    public List<PayrollService> payrollData(String Date) {
+        String Sql_Query = "select * from employee_payroll where start_date>=?";
+        List<PayrollService> payrollServiceData = new ArrayList<>();
+        try {
+            Connection connection = this.getConnection();
+            PreparedStatement preparedStatement=connection.prepareStatement(Sql_Query);
+            preparedStatement.setDate(1, java.sql.Date.valueOf(Date));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String Name = resultSet.getString(2);
+                Date StartDate = resultSet.getDate(3);
+                String Gender=resultSet.getString(4);
+                int Salary = resultSet.getInt(5);
+
+                System.out.println();
+                System.out.println("id=" + id);
+                System.out.println("Name=" + Name);
+                System.out.println("StartDate=" + StartDate);
+                System.out.println("Gender="+Gender);
+                System.out.println("Salary=" + Salary);
+
+
+                PayrollService payrollServiceData1= new PayrollService(resultSet.getInt(1), resultSet.getString(2), resultSet.getDate(3), resultSet.getString(4),resultSet.getInt(5));
+                payrollServiceData.add(payrollServiceData1);
+
+
+            }
+            preparedStatement.close();
+            connection.close();
+
+
+        } catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return payrollServiceData;
+    }
+
+ }
