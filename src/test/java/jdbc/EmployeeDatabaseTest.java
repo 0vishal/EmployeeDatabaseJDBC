@@ -39,5 +39,18 @@ public class EmployeeDatabaseTest {
         Assertions.assertEquals(4,list.size());
     }
 
+    @Test
+    public void newrecord(){
+        int id=9;
+        String name="Karan";
+        String date="2021-2-5";
+        String gender="M";
+        double salary=80000;
+        employeeDatabase=new EmployeeDatabase();
+        employeeDatabase.insertRecord(id,name,date,gender,salary);
+        List<PayrollService> payrollServiceDataList=employeeDatabase.readData();
+        Assertions.assertEquals(9,payrollServiceDataList.size());
+    }
+
 }
 

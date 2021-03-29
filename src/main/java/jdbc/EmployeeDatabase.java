@@ -78,7 +78,23 @@ public class EmployeeDatabase {
         return payrollServiceData;
     }
 
-
+    public long insertRecord(int id, String name, String date,String gender,double salary){
+        try {
+            Connection connection=this.getConnection();
+            PreparedStatement preparedStatement=connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            preparedStatement.setInt(1,id);
+            preparedStatement.setString(2,name);
+            preparedStatement.setString(3, String.valueOf(Date.valueOf(date)));
+            preparedStatement.setString(4,gender);
+            preparedStatement.setDouble(5,salary);
+            int resultSet=preparedStatement.executeUpdate();
+            System.out.println(resultSet);
+            return resultSet;
+        } catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 
     public long updateRecord(double salary,int id){
