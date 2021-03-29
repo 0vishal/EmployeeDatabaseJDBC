@@ -52,5 +52,20 @@ public class EmployeeDatabaseTest {
         Assertions.assertEquals(9,payrollServiceDataList.size());
     }
 
-}
+    @Test
+    public void payroll_details() {
+        int payroll_id=1;
+        double basicpay=35000;
+        double deduction=10000;
+        double taxpay=1000;
+        double tax=500;
+        double netpay=15000;
 
+        employeeDatabase=new EmployeeDatabase();
+        employeeDatabase.payrollDetails(payroll_id,basicpay,deduction,taxpay,tax,netpay);
+        List<PayrollService>payrollServiceDataList=employeeDatabase.readData();
+        Assertions.assertEquals(1,payrollServiceDataList.size());
+    }
+
+
+}

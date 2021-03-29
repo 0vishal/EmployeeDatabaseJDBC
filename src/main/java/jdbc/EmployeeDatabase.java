@@ -8,40 +8,41 @@ import java.util.List;
 
 public class EmployeeDatabase {
 
-        Connection getConnection() throws IllegalAccessException {
-            String JDBCURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
-            String UserName = "root";
-            String Password = "root";
-            Connection connection = null;
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                System.out.println("Driver loaded");
-            } catch (ClassNotFoundException e) {
-                throw new IllegalAccessException(String.format("Driver not found in classpath%s", e));
-
-            }
-
-            listDrivers();
-            try {
-                System.out.println("Connecting to database" + JDBCURL);
-                connection = DriverManager.getConnection(JDBCURL, UserName, Password);
-                System.out.println("Connection succesfully" + connection);
-            } catch (Exception e) {
-                e.printStackTrace();
-
-            }
-            return connection;
+    Connection getConnection() throws IllegalAccessException {
+        String JDBCURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
+        String UserName = "root";
+        String Password = "root";
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Driver loaded");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalAccessException(String.format("Driver not found in classpath%s", e));
 
         }
-        private static void listDrivers() {
-            Enumeration<Driver> driverList = DriverManager.getDrivers();
-            while(driverList.hasMoreElements()){
-                Driver driverClass = driverList.nextElement();
-                System.out.println(" "+driverClass.getClass().getName() );
-            }
-        }
 
-        public List<PayrollService> readData() {
+        listDrivers();
+        try {
+            System.out.println("Connecting to database" + JDBCURL);
+            connection = DriverManager.getConnection(JDBCURL, UserName, Password);
+            System.out.println("Connection succesfully" + connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return connection;
+
+    }
+
+    private static void listDrivers() {
+        Enumeration<Driver> driverList = DriverManager.getDrivers();
+        while (driverList.hasMoreElements()) {
+            Driver driverClass = driverList.nextElement();
+            System.out.println(" " + driverClass.getClass().getName());
+        }
+    }
+
+    public List<PayrollService> readData() {
         String Sql_Query = "select * from employee_payroll";
         List<PayrollService> payrollServiceData = new ArrayList<PayrollService>();
         try {
@@ -78,16 +79,16 @@ public class EmployeeDatabase {
         return payrollServiceData;
     }
 
-    public long insertRecord(int id, String name, String date,String gender,double salary){
+    public long insertRecord(int id, String name, String date, String gender, double salary) {
         try {
-            Connection connection=this.getConnection();
-            PreparedStatement preparedStatement=connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
-            preparedStatement.setInt(1,id);
-            preparedStatement.setString(2,name);
+            Connection connection = this.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
             preparedStatement.setString(3, String.valueOf(Date.valueOf(date)));
-            preparedStatement.setString(4,gender);
-            preparedStatement.setDouble(5,salary);
-            int resultSet=preparedStatement.executeUpdate();
+            preparedStatement.setString(4, gender);
+            preparedStatement.setDouble(5, salary);
+            int resultSet = preparedStatement.executeUpdate();
             System.out.println(resultSet);
             return resultSet;
         } catch (SQLException | IllegalAccessException e) {
@@ -97,27 +98,27 @@ public class EmployeeDatabase {
     }
 
 
-    public long updateRecord(double salary,int id){
-            try {
-                    Connection connection=this.getConnection();
-                    PreparedStatement preparedStatement=connection.prepareStatement("Update employee_payroll set salary=? where id=? ; ");
-                    preparedStatement.setDouble(1,salary);
-                    preparedStatement.setInt(2,id);
-                    long resultSet=preparedStatement.executeUpdate();
-                    System.out.println(resultSet);
-                    return resultSet;
-                } catch (SQLException | IllegalAccessException e){
-                    e.printStackTrace();
-                }
-                return 0;
-            }
+    public long updateRecord(double salary, int id) {
+        try {
+            Connection connection = this.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("Update employee_payroll set salary=? where id=? ; ");
+            preparedStatement.setDouble(1, salary);
+            preparedStatement.setInt(2, id);
+            long resultSet = preparedStatement.executeUpdate();
+            System.out.println(resultSet);
+            return resultSet;
+        } catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public List<PayrollService> payrollData(String Date) {
         String Sql_Query = "select * from employee_payroll where start_date>=?";
         List<PayrollService> payrollServiceData = new ArrayList<>();
         try {
             Connection connection = this.getConnection();
-            PreparedStatement preparedStatement=connection.prepareStatement(Sql_Query);
+            PreparedStatement preparedStatement = connection.prepareStatement(Sql_Query);
             preparedStatement.setDate(1, java.sql.Date.valueOf(Date));
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -125,18 +126,18 @@ public class EmployeeDatabase {
                 int id = resultSet.getInt(1);
                 String Name = resultSet.getString(2);
                 Date StartDate = resultSet.getDate(3);
-                String Gender=resultSet.getString(4);
+                String Gender = resultSet.getString(4);
                 int Salary = resultSet.getInt(5);
 
                 System.out.println();
                 System.out.println("id=" + id);
                 System.out.println("Name=" + Name);
                 System.out.println("StartDate=" + StartDate);
-                System.out.println("Gender="+Gender);
+                System.out.println("Gender=" + Gender);
                 System.out.println("Salary=" + Salary);
 
 
-                PayrollService payrollServiceData1= new PayrollService(resultSet.getInt(1), resultSet.getString(2), resultSet.getDate(3), resultSet.getString(4),resultSet.getInt(5));
+                PayrollService payrollServiceData1 = new PayrollService(resultSet.getInt(1), resultSet.getString(2), resultSet.getDate(3), resultSet.getString(4), resultSet.getInt(5));
                 payrollServiceData.add(payrollServiceData1);
 
 
@@ -152,26 +153,45 @@ public class EmployeeDatabase {
     }
 
     public List<String> datafunction() {
-        List<String> list=new ArrayList<>();
+        List<String> list = new ArrayList<>();
         try {
-            Connection connection=this.getConnection();
-            PreparedStatement preparedStatement=connection.prepareStatement("select gender,sum(salary), avg(salary),min(salary),max(salary),count(salary) from employee_payroll group by gender");
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                int index=1;
-                System.out.println("Gender: "+resultSet.getString(1));
-                System.out.println("Salary: "+resultSet.getString(2));
-                for (int i=0;i<10;i++){
-                    if(index<5) {
+            Connection connection = this.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("select gender,sum(salary), avg(salary),min(salary),max(salary),count(salary) from employee_payroll group by gender");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int index = 1;
+                System.out.println("Gender: " + resultSet.getString(1));
+                System.out.println("Salary: " + resultSet.getString(2));
+                for (int i = 0; i < 10; i++) {
+                    if (index < 5) {
                         list.add(i, resultSet.getString(index));
                         index++;
                     }
                 }
                 System.out.println(list);
             }
-        }catch (SQLException | IllegalAccessException e) {
+        } catch (SQLException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public int payrollDetails(int payroll_id, double basicpay, double deduction, double taxpay, double tax, double netpay) {
+        try {
+            Connection connection = this.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into payroll_details(payroll_id,basicpay,deduction,taxpay,tax,netpay) values(?,?,?,?,?,?); ");
+
+            preparedStatement.setInt(1, payroll_id);
+            preparedStatement.setDouble(2, basicpay);
+            preparedStatement.setDouble(3, deduction);
+            preparedStatement.setDouble(4, taxpay);
+            preparedStatement.setDouble(5, tax);
+            preparedStatement.setDouble(6, netpay);
+            int resultSet = preparedStatement.executeUpdate();
+            return resultSet;
+        } catch (SQLException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
