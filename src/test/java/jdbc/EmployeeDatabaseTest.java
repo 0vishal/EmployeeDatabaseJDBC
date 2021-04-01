@@ -94,10 +94,11 @@ public class EmployeeDatabaseTest {
         double salary=50000;
         int payroll_id=11;
 
-        EmployeeDatabase employeeDatabase=new EmployeeDatabase();
+         employeeDatabase=new EmployeeDatabase();
         employeeDatabase.insertIntoTables(id,name,date,gender,salary,payroll_id);
         List<PayrollService>payrollServiceDataList=employeeDatabase.readData();
         Assertions.assertEquals(11,payrollServiceDataList.size());
     }
+
 
 }
