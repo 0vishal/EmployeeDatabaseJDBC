@@ -226,31 +226,34 @@ public class EmployeeDatabase {
         }
     }
 
-
-    public void insetRecords(List<PayrollService> payrollServiceData) throws SQLException, IllegalAccessException {
+    public void insertIntoTables(int id, String name, String date,String gender,double salary,int payroll_id) throws IllegalAccessException, SQLException {
         Connection connection = this.getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement("insert into payroll_details(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
-            for (Iterator<PayrollService> iterator = payrollServiceData.iterator(); iterator.hasNext(); ) {
-                PayrollService payrollServiceData1 = (PayrollService) iterator.next();
-                System.out.println("employee being added  " + payrollServiceData1.getName());
-                preparedStatement.setInt(1, payrollServiceData1.getId());
-                preparedStatement.setString(2, payrollServiceData1.getName());
-                preparedStatement.setDate(3, payrollServiceData1.getStartDate());
-                preparedStatement.setString(4, payrollServiceData1.getGender());
-                preparedStatement.setDouble(5, payrollServiceData1.getSalary());
-                System.out.println("employee Added  " + payrollServiceData1.Name);
-                preparedStatement.addBatch();
-            }
-            int[] recordUpdateCount = preparedStatement.executeBatch();
+            PreparedStatement preparedStatement=connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            preparedStatement.setInt(1,id);
+            preparedStatement.setString(2,name);
+            preparedStatement.setString(3, String.valueOf(Date.valueOf(date)));
+            preparedStatement.setString(4,gender);
+            preparedStatement.setDouble(5,salary);
+            int resultSet=preparedStatement.executeUpdate();
+
+
+            PreparedStatement preparedStatement1=connection.prepareStatement("insert into payroll_details(payroll_id,basicpay,deduction,taxpay,tax,netpay) values(?,?,?,?,?,?); ");
+            preparedStatement1.setInt(1,payroll_id);
+            preparedStatement1.setDouble(2, salary/20);
+            preparedStatement1.setDouble(3,salary/5);
+            preparedStatement1.setDouble(4,salary/2);
+            preparedStatement1.setDouble(5,salary/20);
+            preparedStatement1.setDouble(6,salary/10);
+            int resultSet1=preparedStatement1.executeUpdate();
             connection.commit();
-        } catch (SQLException throwables) {
+        }catch (SQLException throwables){
             throwables.printStackTrace();
             connection.rollback();
+        }finally {
+            connection.close();
         }
     }
-
-
 }
 

@@ -86,15 +86,18 @@ public class EmployeeDatabaseTest {
     }
 
     @Test
-    public void insertmultiplerecord() throws SQLException, IllegalAccessException, SQLException {
-        EmployeeDatabase employeeDatabase=new EmployeeDatabase();
-        List<PayrollService> list=new ArrayList<>();
-        list.add(new PayrollService(11,"Adam", Date.valueOf("2021-02-08"),"M",60000));
-        list.add(new PayrollService(12,"Prop", Date.valueOf("2021-03-10"),"F",20000));
-        employeeDatabase.insetRecords(list);
-        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
-        Assertions.assertEquals(7,employeePayrollDataList.size());
+    void insertintoTables() throws SQLException, IllegalAccessException {
+        int id=11;
+        String name="Sarvesh";
+        String date="2020-3-08";
+        String gender="M";
+        double salary=50000;
+        int payroll_id=11;
 
+        EmployeeDatabase employeeDatabase=new EmployeeDatabase();
+        employeeDatabase.insertIntoTables(id,name,date,gender,salary,payroll_id);
+        List<PayrollService>payrollServiceDataList=employeeDatabase.readData();
+        Assertions.assertEquals(11,payrollServiceDataList.size());
     }
 
 }
