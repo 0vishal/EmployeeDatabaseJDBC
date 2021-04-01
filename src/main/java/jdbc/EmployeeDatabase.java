@@ -270,5 +270,29 @@ public class EmployeeDatabase {
         }
     }
 
+    public void insetRecordArrays(List<PayrollService> payrollServiceData) throws SQLException, IllegalAccessException {
+        Connection connection = this.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            for (Iterator<PayrollService> iterator = payrollServiceData.iterator(); iterator.hasNext(); ) {
+                PayrollService payrollServiceData1 = (PayrollService) iterator.next();
+                System.out.println("employee being added  " + payrollServiceData1.getName());
+                preparedStatement.setInt(1, payrollServiceData1.getId());
+                preparedStatement.setString(2, payrollServiceData1.getName());
+                preparedStatement.setDate(3, payrollServiceData1.getStartDate());
+                preparedStatement.setString(4, payrollServiceData1.getGender());
+                preparedStatement.setDouble(5, payrollServiceData1.getSalary());
+                System.out.println("employee Added  " + payrollServiceData1.Name);
+                preparedStatement.addBatch();
+            }
+            int[] recordUpdateCounts = preparedStatement.executeBatch();
+            connection.commit();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            connection.rollback();
+        }
+    }
+
 }
 

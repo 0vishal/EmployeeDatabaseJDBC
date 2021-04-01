@@ -34,4 +34,55 @@ public class PayrollService {
         this.tax = tax;
         this.netpay = netpay;
     }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public Date getStartDate() {
+        return StartDate;
+    }
+
+    public void setStartDate(String startDate) {
+        StartDate = Date.valueOf(startDate);
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public int getSalary() {
+        return Salary;
+    }
+
+    public void setSalary(int salary) {
+        Salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "PayrollService{" +
+                "id=" + id +
+                ", Name='" + Name + '\'' +
+                ", StartDate='" + StartDate + '\'' +
+                ", Gender='" + Gender + '\'' +
+                ", Salary=" + Salary +
+                '}';
+    }
+
 }

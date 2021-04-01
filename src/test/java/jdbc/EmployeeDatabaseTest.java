@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,6 +109,36 @@ public class EmployeeDatabaseTest {
         employeeDatabase.deleteRecord(name);
         List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
         Assertions.assertEquals(3,employeePayrollDataList.size());
+    }
+
+    @Test
+
+    public void insert_multiple_values() throws SQLException, IllegalAccessException, SQLException {
+       employeeDatabase=new EmployeeDatabase();
+        List<PayrollService> list=new ArrayList<>();
+        list.add(new PayrollService(12,"Ravi", Date.valueOf("2020-04-21"),"M",34000));
+        list.add(new PayrollService(13,"Shree",Date.valueOf("2021-06-12"),"F",54000));
+        employeeDatabase.insetRecordArrays(list);
+        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
+        Assertions.assertEquals(7,employeePayrollDataList.size());
+
+    }
+
+    @Test
+    public void addmultipleecords_calculateduration() throws SQLException, IllegalAccessException,SQLException {
+       employeeDatabase=new EmployeeDatabase();
+        List<PayrollService> list=new ArrayList<>();
+        list.add(new PayrollService(14,"Nahir", Date.valueOf("2019-01-21"),"M",50000));
+        list.add(new PayrollService(15,"Arya",Date.valueOf("2018-09-15"),"F",90000));
+
+        Instant start = Instant.now();
+        employeeDatabase.insetRecordArrays(list);
+        Instant end = Instant.now();
+        System.out.println("Duration without thread"+ Duration.between(start,end));
+        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
+        Assertions.assertEquals(15,employeePayrollDataList.size());
+
+
     }
 
 
