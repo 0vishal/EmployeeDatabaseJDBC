@@ -2,10 +2,8 @@ package jdbc;
 
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 public class EmployeeDatabase {
 
@@ -293,6 +291,35 @@ public class EmployeeDatabase {
             connection.rollback();
         }
     }
+
+    private void insetRecordsThread(int id, String firstname, Date startdate, String gender, double salary) {
+
+    }
+
+    public void insetRecordsThread(List<PayrollService> payrollServiceData) throws SQLException, IllegalAccessException {
+        Map<Integer, Boolean> employeeAdditionsStatus = new HashMap<>();
+        payrollServiceData.forEach(payrollServiceData1 -> {
+            Runnable task = () -> {
+                employeeAdditionsStatus.put(payrollServiceData.hashCode(), false);
+                System.out.println("employee begin add " + Thread.currentThread().getName());
+                this.insetRecordsThread(payrollServiceData1.id, payrollServiceData1.Name, payrollServiceData1.StartDate, payrollServiceData1.Gender, payrollServiceData1.Salary);
+                employeeAdditionsStatus.put(payrollServiceData.hashCode(), true);
+            };
+            Thread thread=new Thread(task , payrollServiceData1.Name);
+            thread.start();
+        });
+        while (employeeAdditionsStatus.containsValue(false)){
+
+            try {
+                Thread.sleep(10);
+            }catch (InterruptedException e){
+
+            }
+            System.out.println(this.readData());
+        }
+    }
+
+
 
 }
 

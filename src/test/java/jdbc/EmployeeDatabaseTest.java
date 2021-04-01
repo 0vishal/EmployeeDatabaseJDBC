@@ -138,8 +138,31 @@ public class EmployeeDatabaseTest {
         List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
         Assertions.assertEquals(15,employeePayrollDataList.size());
 
+    }
+
+    @Test
+    public void addrecordsthread() throws SQLException, IllegalAccessException,SQLException {
+       employeeDatabase=new EmployeeDatabase();
+        List<PayrollService> list=new ArrayList<>();
+        list.add(new PayrollService(14,"Ranbir", Date.valueOf("2021-03-01"),"M",70000));
+        list.add(new PayrollService(15,"Naina",Date.valueOf("2021-01-11"),"F",90000));
+        list.add(new PayrollService(16,"yami",Date.valueOf("2021-06-21"),"F",90000));
+        Instant start =Instant.now();
+        employeeDatabase.insetRecordsThread(list);
+        Instant end = Instant.now();
+        System.out.println("Duration without thread: "+ Duration.between(start,end));
+
+        Instant thredstart =Instant.now();
+        employeeDatabase.insetRecordsThread(list);
+        Instant threadend = Instant.now();
+        System.out.println("Duration with thread: "+ Duration.between(thredstart,threadend));
+
+        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
+        Assertions.assertEquals(3,employeePayrollDataList.size());
 
     }
+
+
 
 
 
