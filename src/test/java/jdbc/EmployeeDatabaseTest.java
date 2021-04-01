@@ -3,7 +3,9 @@ package jdbc;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDatabaseTest {
@@ -83,5 +85,16 @@ public class EmployeeDatabaseTest {
         Assertions.assertEquals(10,payrollServiceDataList.size());
     }
 
+    @Test
+    public void insertmultiplerecord() throws SQLException, IllegalAccessException, SQLException {
+        EmployeeDatabase employeeDatabase=new EmployeeDatabase();
+        List<PayrollService> list=new ArrayList<>();
+        list.add(new PayrollService(11,"Adam", Date.valueOf("2021-02-08"),"M",60000));
+        list.add(new PayrollService(12,"Prop", Date.valueOf("2021-03-10"),"F",20000));
+        employeeDatabase.insetRecords(list);
+        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
+        Assertions.assertEquals(7,employeePayrollDataList.size());
+
+    }
 
 }

@@ -4,6 +4,7 @@ package jdbc;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 public class EmployeeDatabase {
@@ -224,4 +225,32 @@ public class EmployeeDatabase {
             connection.close();
         }
     }
+
+
+    public void insetRecords(List<PayrollService> payrollServiceData) throws SQLException, IllegalAccessException {
+        Connection connection = this.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into payroll_details(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            for (Iterator<PayrollService> iterator = payrollServiceData.iterator(); iterator.hasNext(); ) {
+                PayrollService payrollServiceData1 = (PayrollService) iterator.next();
+                System.out.println("employee being added  " + payrollServiceData1.getName());
+                preparedStatement.setInt(1, payrollServiceData1.getId());
+                preparedStatement.setString(2, payrollServiceData1.getName());
+                preparedStatement.setDate(3, payrollServiceData1.getStartDate());
+                preparedStatement.setString(4, payrollServiceData1.getGender());
+                preparedStatement.setDouble(5, payrollServiceData1.getSalary());
+                System.out.println("employee Added  " + payrollServiceData1.Name);
+                preparedStatement.addBatch();
+            }
+            int[] recordUpdateCount = preparedStatement.executeBatch();
+            connection.commit();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            connection.rollback();
+        }
+    }
+
+
 }
+
