@@ -100,5 +100,15 @@ public class EmployeeDatabaseTest {
         Assertions.assertEquals(11,payrollServiceDataList.size());
     }
 
+    @Test
+    public void deletingemployee() throws SQLException, IllegalAccessException {
+        String name="vishal";
+        employeeDatabase=new EmployeeDatabase();
+        employeeDatabase.deleteRecord(name);
+        List<PayrollService> employeePayrollDataList=employeeDatabase.readData();
+        Assertions.assertEquals(3,employeePayrollDataList.size());
+    }
+
+
 
 }
