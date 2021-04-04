@@ -8,7 +8,9 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-    class EmployeeJsonTest {
+import java.sql.SQLException;
+
+class EmployeeJsonTest {
 
 
         @BeforeAll
@@ -51,6 +53,20 @@ import org.junit.jupiter.api.Test;
             Assertions.assertEquals(201,statusCode1);
             Assertions.assertEquals(201,statusCode2);
             Assertions.assertEquals(7,restAssureEmployeeData.length);
+        }
+
+        @Test
+        public void Updatesalary() throws SQLException {
+            EmployeeDataJson[] restAssureEmployeeData=getEmployeelist();
+            String empJson=new Gson().toJson(restAssureEmployeeData);
+            Assertions.assertEquals(9,restAssureEmployeeData.length);
+            RequestSpecification requestSpecification=RestAssured.given();
+            requestSpecification.header("Content-Type","application/json");
+            requestSpecification.body("{\"name\":\"shali\",\"salary\":\"15000\"}");
+            Response response=requestSpecification.put("/employees/update/2");
+
+            int statusCode=response.getStatusCode();
+            Assertions.assertEquals(200,statusCode);
         }
 
 
