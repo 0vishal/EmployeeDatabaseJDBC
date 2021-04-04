@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
             RestAssured.port=4000;
         }
 
-        public EmployeeJsonTest[] getEmployeelist(){
+        public EmployeeDataJson[] getEmployeelist(){
             Response response= RestAssured.get("/employees");
             System.out.println("employee entries in json server: \n"+response.asString());
-            EmployeeJsonTest[] jsonServerEmployeeData=new Gson().fromJson(response.asString(),EmployeeJsonTest[].class);
+            EmployeeDataJson[] jsonServerEmployeeData=new Gson().fromJson(response.asString(),EmployeeDataJson[].class);
             return jsonServerEmployeeData;
         }
 
-        public Response addEmployeeDataToJsonServer(EmployeeJsonTest restAssureEmpData){
+        public Response addEmployeeDataToJsonServer(EmployeeDataJson restAssureEmpData){
             String employee=new Gson().toJson(restAssureEmpData);
             RequestSpecification requestSpecification=RestAssured.given();
             requestSpecification.header("Content-Type","application/json");
@@ -34,9 +34,11 @@ import org.junit.jupiter.api.Test;
 
         @Test
         public void RetrieveServerData(){
-            EmployeeJsonTest[] restAssureEmployeeData=getEmployeelist();
+            EmployeeDataJson[] restAssureEmployeeData=getEmployeelist();
             System.out.println(restAssureEmployeeData);
             Assertions.assertEquals(3,restAssureEmployeeData.length);
         }
+
+
 
     }
