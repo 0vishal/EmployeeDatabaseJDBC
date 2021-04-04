@@ -10,12 +10,12 @@ public class PayrollService {
     public String Gender;
     public int Salary;
 
-    public int payroll_id;
-    public double basicpay;
-    public double deduction;
-    public double taxpay;
-    public double tax;
-    public double netpay;
+    //public int payroll_id;
+    //public double basicpay;
+    //public double deduction;
+    //public double taxpay;
+    //public double tax;
+    //public double netpay;
 
 
     public PayrollService(int id, String name, Date startDate, String gender, int salary) {
@@ -26,14 +26,14 @@ public class PayrollService {
         Salary = salary;
     }
 
-    public PayrollService(int payroll_id, double basicpay, double deduction, double taxpay, double tax, double netpay) {
-        this.payroll_id = payroll_id;
-        this.basicpay = basicpay;
-        this.deduction = deduction;
-        this.taxpay = taxpay;
-        this.tax = tax;
-        this.netpay = netpay;
-    }
+    //public PayrollService(int payroll_id, double basicpay, double deduction, double taxpay, double tax, double netpay) {
+    //      this.payroll_id = payroll_id;
+    //     this.basicpay = basicpay;
+    //    this.deduction = deduction;
+    //    this.taxpay = taxpay;
+    //    this.tax = tax;
+    //    this.netpay = netpay;
+    //}
     public int getId() {
         return id;
     }
