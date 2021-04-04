@@ -39,6 +39,15 @@ import org.junit.jupiter.api.Test;
             Assertions.assertEquals(3,restAssureEmployeeData.length);
         }
 
+        @Test
+        public void addNewEmployee(){
+            EmployeeDataJson[] restAssureEmployeeData=getEmployeelist();
+            EmployeeDataJson jsonServerEmployeeData1=new EmployeeDataJson(9,"Vishal",40000);
+            Response response=addEmployeeDataToJsonServer(jsonServerEmployeeData1);
+            int statusCode= response.statusCode();
+            Assertions.assertEquals(201,statusCode);
+            Assertions.assertEquals(4,restAssureEmployeeData.length);
+        }
 
 
     }
