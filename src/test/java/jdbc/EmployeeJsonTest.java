@@ -40,14 +40,20 @@ import org.junit.jupiter.api.Test;
         }
 
         @Test
-        public void addNewEmployee(){
+        public void addMultipleEmployee(){
             EmployeeDataJson[] restAssureEmployeeData=getEmployeelist();
-            EmployeeDataJson jsonServerEmployeeData1=new EmployeeDataJson(9,"Vishal",40000);
-            Response response=addEmployeeDataToJsonServer(jsonServerEmployeeData1);
-            int statusCode= response.statusCode();
-            Assertions.assertEquals(201,statusCode);
-            Assertions.assertEquals(4,restAssureEmployeeData.length);
+            EmployeeDataJson jsonServerEmployeeData1=new EmployeeDataJson(21,"Ram",40000);
+            EmployeeDataJson jsonServerEmployeeData2=new EmployeeDataJson(31,"Sham",40000);
+            Response response1=addEmployeeDataToJsonServer(jsonServerEmployeeData1);
+            Response response2=addEmployeeDataToJsonServer(jsonServerEmployeeData2);
+            int statusCode1= response1.statusCode();
+            int statusCode2= response2.statusCode();
+            Assertions.assertEquals(201,statusCode1);
+            Assertions.assertEquals(201,statusCode2);
+            Assertions.assertEquals(7,restAssureEmployeeData.length);
         }
+
+
 
 
     }
