@@ -6,40 +6,39 @@ import java.sql.Date;
 import java.util.*;
 
 public class EmployeeDatabase {
+    private int ConnectionCounter=0;
 
-    Connection getConnection() throws IllegalAccessException {
-        String JDBCURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
-        String UserName = "root";
-        String Password = "root";
-        Connection connection = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Driver loaded");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalAccessException(String.format("Driver not found in classpath%s", e));
+
+        Connection getConnection() throws IllegalAccessException {
+            String JDBCURL = "jdbc:mysql://localhost:3306/payroll_service_jdbc?useSSL=false";
+            String UserName = "root";
+            String Password = "root";
+            Connection connection = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("Driver loaded");
+            } catch (ClassNotFoundException e) {
+                throw new IllegalAccessException(String.format("Driver not found in classpath%s", e));
+
+            }
+
+            try {
+                System.out.println("Processing Thread "+Thread.currentThread().getName()+"Connecting to database with id "+ConnectionCounter);
+                connection = DriverManager.getConnection(JDBCURL, UserName, Password);
+                System.out.println("Processing Thread "+Thread.currentThread().getName()+" id "+ConnectionCounter+ " Connection was sucessfull!!! " +connection);
+                //System.out.println("Connecting to database" + JDBCURL);
+                //connection = DriverManager.getConnection(JDBCURL, UserName, Password);
+                //System.out.println("Connection succesfull" + connection);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+            return connection;
 
         }
 
-        listDrivers();
-        try {
-            System.out.println("Connecting to database" + JDBCURL);
-            connection = DriverManager.getConnection(JDBCURL, UserName, Password);
-            System.out.println("Connection succesfully" + connection);
-        } catch (Exception e) {
-            e.printStackTrace();
 
-        }
-        return connection;
 
-    }
-
-    private static void listDrivers() {
-        Enumeration<Driver> driverList = DriverManager.getDrivers();
-        while (driverList.hasMoreElements()) {
-            Driver driverClass = driverList.nextElement();
-            System.out.println(" " + driverClass.getClass().getName());
-        }
-    }
 
     public List<PayrollService> readData() {
         String Sql_Query = "select * from employee_payroll";
@@ -81,7 +80,7 @@ public class EmployeeDatabase {
     public long insertRecord(int id, String name, String date, String gender, double salary) {
         try {
             Connection connection = this.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,date,gender,salary) values(?,?,?,?,?); ");
             preparedStatement.setInt(1, id);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, String.valueOf(Date.valueOf(date)));
@@ -113,7 +112,7 @@ public class EmployeeDatabase {
     }
 
     public List<PayrollService> payrollData(String Date) {
-        String Sql_Query = "select * from employee_payroll where start_date>=?";
+        String Sql_Query = "select * from employee_payroll where date>=?";
         List<PayrollService> payrollServiceData = new ArrayList<>();
         try {
             Connection connection = this.getConnection();
@@ -138,7 +137,6 @@ public class EmployeeDatabase {
 
                 PayrollService payrollServiceData1 = new PayrollService(resultSet.getInt(1), resultSet.getString(2), resultSet.getDate(3), resultSet.getString(4), resultSet.getInt(5));
                 payrollServiceData.add(payrollServiceData1);
-
 
             }
             preparedStatement.close();
@@ -187,6 +185,7 @@ public class EmployeeDatabase {
             preparedStatement.setDouble(5, tax);
             preparedStatement.setDouble(6, netpay);
             int resultSet = preparedStatement.executeUpdate();
+            System.out.println(resultSet);
             return resultSet;
         } catch (SQLException | IllegalAccessException e) {
             e.printStackTrace();
@@ -272,7 +271,7 @@ public class EmployeeDatabase {
         Connection connection = this.getConnection();
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,start_date,gender,salary) values(?,?,?,?,?); ");
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into employee_payroll(id,name,date,gender,salary) values(?,?,?,?,?); ");
             for (Iterator<PayrollService> iterator = payrollServiceData.iterator(); iterator.hasNext(); ) {
                 PayrollService payrollServiceData1 = (PayrollService) iterator.next();
                 System.out.println("employee being added  " + payrollServiceData1.getName());
@@ -318,8 +317,5 @@ public class EmployeeDatabase {
             System.out.println(this.readData());
         }
     }
-
-
-
 }
 
